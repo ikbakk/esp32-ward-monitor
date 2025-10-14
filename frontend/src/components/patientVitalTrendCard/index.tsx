@@ -1,5 +1,8 @@
 "use client";
 
+import get from "lodash/get";
+import last from "lodash/last";
+import nth from "lodash/nth";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import {
   CartesianGrid,
@@ -14,12 +17,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import type { ReadingsTable } from "@/types/supabase";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import get from "lodash/get";
-import last from "lodash/last";
-import nth from "lodash/nth";
-import { ReadingsTable } from "@/types/supabase";
 
 interface VitalTrendCardProps {
   title: string;
@@ -99,19 +99,20 @@ const VitalTrendCard = ({
           <p className="text-xs text-muted-foreground">
             Current reading • Normal range: {normalRange}
           </p>
-
-          <p className="text-xs text-muted-foreground mb-2">
-            {new Date(data[0].timestamp!).toLocaleDateString("en-US", {
-              dateStyle: "full",
-            })}{" "}
-            -{" "}
-            {new Date(data[data.length - 1].timestamp!).toLocaleDateString(
-              "en-US",
-              {
+          {data && data.length > 0 && (
+            <p className="text-xs text-muted-foreground mb-2">
+              {new Date(data[0].timestamp!).toLocaleDateString("en-US", {
                 dateStyle: "full",
-              },
-            )}
-          </p>
+              })}{" "}
+              -{" "}
+              {new Date(data[data.length - 1].timestamp!).toLocaleDateString(
+                "en-US",
+                {
+                  dateStyle: "full",
+                },
+              )}
+            </p>
+          )}{" "}
         </div>
 
         <ChartContainer
@@ -120,53 +121,51 @@ const VitalTrendCard = ({
           }}
           className="h-[200px] w-full"
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={transformedData} margin={{ left: 12, right: 12 }}>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="timelabel"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-              />
-              <YAxis
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                unit={` ${unit}`}
-                domain={yAxisDomain()}
-              />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    nameKey="value"
-                    labelFormatter={(_, payload) => {
-                      const ts = payload?.[0]?.payload?.timestamp;
-                      return ts
-                        ? new Date(ts).toLocaleString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "";
-                    }}
-                  />
-                }
-              />{" "}
-              <Line
-                type="natural"
-                dataKey="value"
-                stroke={color}
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4, stroke: color, strokeWidth: 1 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <LineChart data={transformedData} margin={{ left: 12, right: 12 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis
+              dataKey="timelabel"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+            />
+            <YAxis
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              unit={` ${unit}`}
+              domain={yAxisDomain()}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="value"
+                  labelFormatter={(_, payload) => {
+                    const ts = payload?.[0]?.payload?.timestamp;
+                    return ts
+                      ? new Date(ts).toLocaleString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "";
+                  }}
+                />
+              }
+            />{" "}
+            <Line
+              type="natural"
+              dataKey="value"
+              stroke={color}
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 4, stroke: color, strokeWidth: 1 }}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>

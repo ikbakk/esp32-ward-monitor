@@ -1,10 +1,10 @@
-import { supabaseClient } from "@/lib/supabase/client";
-import { ReadingsTable } from "@/types/supabase";
-import { RealtimeChannel } from "@supabase/supabase-js";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
+import { supabaseClient } from "@/lib/supabase/client";
+import type { ReadingsTable } from "@/types/supabase";
 
-export type TimeRange = "6h" | "12h" | "24h" | "48h";
+export type TimeRange = "6h" | "12h" | "24h" | "48h" | "all";
 
 interface HooksProps {
   enabled?: boolean;
@@ -12,11 +12,15 @@ interface HooksProps {
   timeRange: TimeRange;
 }
 
-const getCutoffTimestamp = (range: TimeRange): string => {
-  const now = new Date().getTime();
-  const hours =
-    range === "6h" ? 6 : range === "12h" ? 12 : range === "24h" ? 24 : 48;
-  const cutoff = new Date(now - hours * 60 * 60 * 1000);
+const getCutoffTimestamp = (range: Exclude<TimeRange, "all">): string => {
+  const now = Date.now();
+  const hoursMap: Record<Exclude<TimeRange, "all">, number> = {
+    "6h": 6,
+    "12h": 12,
+    "24h": 24,
+    "48h": 48,
+  };
+  const cutoff = new Date(now - hoursMap[range] * 60 * 60 * 1000);
   return cutoff.toISOString();
 };
 
@@ -28,20 +32,24 @@ export const useReadingsRealtime = ({
   const queryClient = useQueryClient();
   const channelRef = useRef<RealtimeChannel | null>(null);
 
-  // Include patientId in query key for proper cache isolation
   const queryKey = ["readings", timeRange, patientId];
 
-  // Query to fetch readings within the time range
   const query = useQuery<ReadingsTable[]>({
     queryKey,
     queryFn: async () => {
-      const cutoff = getCutoffTimestamp(timeRange);
-      const { data, error } = await supabaseClient
+      let query = supabaseClient
         .from("readings")
         .select("*")
-        .eq("patient_id", patientId)
-        .gte("timestamp", cutoff)
-        .order("timestamp", { ascending: true });
+        .eq("patient_id", patientId);
+
+      if (timeRange !== "all") {
+        const cutoff = getCutoffTimestamp(timeRange);
+        query = query.gte("timestamp", cutoff);
+      }
+
+      const { data, error } = await query.order("timestamp", {
+        ascending: true,
+      });
 
       if (error) throw error;
       return data || [];
@@ -49,7 +57,6 @@ export const useReadingsRealtime = ({
     enabled: enabled && !!patientId,
   });
 
-  // Set up real-time subscription for INSERT events only
   useEffect(() => {
     if (!enabled || !supabaseClient || !patientId) return;
 
@@ -67,18 +74,24 @@ export const useReadingsRealtime = ({
       (payload) => {
         const newRecord = payload.new as ReadingsTable;
 
-        // Check if the new record falls within our time range
-        const cutoff = getCutoffTimestamp(timeRange);
-        const recordTimestamp = newRecord.timestamp;
+        // Skip invalid/null timestamps
+        if (!newRecord.timestamp) return;
 
-        if (recordTimestamp! >= cutoff) {
-          // Add the new record to the cache (append since order is ascending)
+        if (timeRange === "all") {
           queryClient.setQueryData(
             queryKey,
-            (oldData: ReadingsTable[] | undefined) => {
-              if (!oldData) return [newRecord];
-              return [...oldData, newRecord]; // Append to end since ordered ascending
-            },
+            (oldData: ReadingsTable[] | undefined) =>
+              oldData ? [...oldData, newRecord] : [newRecord],
+          );
+          return;
+        }
+
+        const cutoff = getCutoffTimestamp(timeRange);
+        if (newRecord.timestamp >= cutoff) {
+          queryClient.setQueryData(
+            queryKey,
+            (oldData: ReadingsTable[] | undefined) =>
+              oldData ? [...oldData, newRecord] : [newRecord],
           );
         }
       },

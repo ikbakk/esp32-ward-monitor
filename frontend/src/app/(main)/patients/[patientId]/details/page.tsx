@@ -21,7 +21,7 @@ export default function GraphsPage() {
   const { data } = useReadingsRealtime({ timeRange, patientId });
 
   return (
-    <div className="">
+    <div className="flex flex-col gap-4">
       <div className="mb-4 flex w-full flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <SkeletonText
