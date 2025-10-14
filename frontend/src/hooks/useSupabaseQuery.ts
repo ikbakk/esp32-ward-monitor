@@ -1,6 +1,6 @@
-import { supabaseClient } from "@/lib/supabase/client";
-import { Database } from "@/types/supabase";
 import { useQuery } from "@tanstack/react-query";
+import { supabaseClient } from "@/lib/supabase/client";
+import type { Database } from "@/types/supabase";
 
 export const useGetAllFromTable = <
   T extends keyof Database["public"]["Tables"],

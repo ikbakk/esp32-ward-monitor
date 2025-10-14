@@ -1,25 +1,5 @@
-import HomePage from "@/components/pages/home";
-import type { Patient } from "@/types/PatientCard";
 import { LayoutDashboard } from "lucide-react";
-
-const mockPatients: Patient[] = [
-  {
-    id: "1",
-    name: "Sarah Johnson",
-    age: 45,
-    roomNumber: "ICU-101",
-    bedNumber: "A",
-    admissionDate: "2024-01-15",
-    condition: "normal",
-    vitals: {
-      heartRate: 72,
-      oxygenSaturation: 98,
-      temperature: 36.8,
-      bloodPressure: { systolic: 120, diastolic: 80 },
-      respiratoryRate: 16,
-    },
-  },
-];
+import HomePage from "@/components/pages/home";
 
 export default function Home() {
   return (

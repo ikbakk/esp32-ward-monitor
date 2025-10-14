@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TimeRange } from "@/hooks/useRealtimeReadingsByTimeRange";
+import type { TimeRange } from "@/hooks/useRealtimeReadingsByTimeRange";
 
 interface TimeRangeSelectorProps {
   value: string;
@@ -25,6 +25,7 @@ const TimeRangeSelector = ({ value, onChange }: TimeRangeSelectorProps) => {
         <SelectItem value="12h">Last 12h</SelectItem>
         <SelectItem value="24h">Last 24h</SelectItem>
         <SelectItem value="48h">Last 48h</SelectItem>
+        <SelectItem value="all">All records</SelectItem>
       </SelectContent>
     </Select>
   );

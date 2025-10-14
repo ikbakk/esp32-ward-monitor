@@ -15,7 +15,7 @@ import { getConditionColor } from "./cardUtils";
 import PatientCardHeader from "./cardHeader";
 import last from "lodash/last";
 import SkeletonText from "../ui/skeleton-text";
-import { PatientTable } from "@/types/supabase";
+import type { PatientTable } from "@/types/supabase";
 import { getReadings } from "@/hooks/queries/readings";
 
 interface PatientCardProps {

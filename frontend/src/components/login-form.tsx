@@ -32,7 +32,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -66,6 +65,7 @@ export function LoginForm({
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
+            admin@example.com:admin
           </CardDescription>
         </CardHeader>
         <CardContent>
