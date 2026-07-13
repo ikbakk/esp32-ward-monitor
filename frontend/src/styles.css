@@ -1,0 +1,700 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+  --ink: #102033;
+  --muted: #607086;
+  --line: #d8e1ec;
+  --panel: rgba(255, 255, 255, 0.86);
+  --panel-solid: #ffffff;
+  --bg: #edf3f8;
+  --normal: #0f766e;
+  --normal-bg: #dff7f2;
+  --warning: #a16207;
+  --warning-bg: #fff1c2;
+  --critical: #b91c1c;
+  --critical-bg: #ffe1e1;
+  --offline: #475569;
+  --offline-bg: #e2e8f0;
+  --unknown: #6d28d9;
+  --unknown-bg: #ede9fe;
+  --unmonitored: #334155;
+  --unmonitored-bg: #eef2f7;
+  --vacant: #64748b;
+  --vacant-bg: #f8fafc;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 28rem),
+    linear-gradient(135deg, #f8fbfd 0%, var(--bg) 48%, #e5eef6 100%);
+  color: var(--ink);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.login-shell {
+  align-items: center;
+  display: grid;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.login-panel {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(230, 241, 249, 0.96));
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  box-shadow: 0 30px 90px rgba(30, 64, 95, 0.18);
+  margin: auto;
+  max-width: 760px;
+  padding: clamp(2rem, 6vw, 4.5rem);
+}
+
+.login-panel h1,
+.topbar h1,
+.command-panel h2,
+.priority-panel h2,
+.ward-board h2,
+.detail-hero h2 {
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.login-panel h1 {
+  font-size: clamp(3rem, 9vw, 6rem);
+}
+
+.login-copy {
+  color: var(--muted);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: 58ch;
+}
+
+.eyebrow {
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.sensor-strip,
+.topbar-actions,
+.ward-metrics,
+.priority-vitals,
+.bed-topline,
+.device-line,
+.section-heading,
+.ward-board-header,
+.room-label,
+.bed-row,
+.summary-grid,
+.detail-stats {
+  display: flex;
+}
+
+.sensor-strip {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+.sensor-strip span,
+.state-pill,
+.ward-metrics span,
+.detail-stats span {
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  border-radius: 999px;
+  color: #075985;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.45rem 0.75rem;
+}
+
+.primary-action,
+.ghost-button {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.primary-action {
+  background: #102033;
+  color: #fff;
+  font-size: 1rem;
+  padding: 1rem 1.35rem;
+}
+
+.ghost-button {
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.72rem 1rem;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: rgba(15, 23, 42, 0.96);
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.25rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 0.85rem;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: #38bdf8;
+  border-radius: 16px;
+  color: #082f49;
+  display: grid;
+  font-weight: 950;
+  height: 48px;
+  place-items: center;
+  width: 48px;
+}
+
+.brand small,
+.sidebar-status span {
+  color: #94a3b8;
+  display: block;
+}
+
+.nav-links {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.nav-links a {
+  border-radius: 14px;
+  color: #cbd5e1;
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  background: rgba(56, 189, 248, 0.16);
+  color: #fff;
+}
+
+.sidebar-status {
+  border-top: 1px solid rgba(148, 163, 184, 0.24);
+  display: grid;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.sidebar-status strong {
+  color: #fff;
+  font-size: 2rem;
+}
+
+.main-column {
+  min-width: 0;
+}
+
+.topbar {
+  align-items: center;
+  backdrop-filter: blur(18px);
+  background: rgba(248, 251, 253, 0.78);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar h1 {
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+}
+
+.topbar-actions {
+  gap: 0.75rem;
+}
+
+.page-grid,
+.detail-page {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.command-panel,
+.priority-panel,
+.ward-board,
+.detail-hero,
+.bed-detail,
+.history-panel,
+.care-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  box-shadow: 0 16px 50px rgba(30, 64, 95, 0.08);
+}
+
+.command-panel,
+.priority-panel,
+.detail-hero,
+.history-panel,
+.care-panel {
+  padding: 1.25rem;
+}
+
+.summary-grid {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  min-width: 150px;
+  padding: 1rem;
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.summary-card span,
+.quiet-copy,
+.patient-meta,
+.device-line,
+.empty-vitals,
+.bed-detail p,
+.detail-hero p,
+.care-panel p {
+  color: var(--muted);
+}
+
+.summary-card.critical {
+  background: var(--critical-bg);
+  border-color: #fecaca;
+  color: var(--critical);
+}
+
+.summary-card.warning {
+  background: var(--warning-bg);
+  border-color: #fde68a;
+  color: var(--warning);
+}
+
+.summary-card.offline {
+  background: var(--offline-bg);
+  color: var(--offline);
+}
+
+.section-heading,
+.ward-board-header,
+.topbar,
+.detail-hero {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.priority-list,
+.board-list,
+.room-stack,
+.patient-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.priority-item {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 8px solid var(--muted);
+  border-radius: 18px;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.priority-state {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.priority-vitals {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.priority-vitals span,
+.mini-vital {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.3rem 0.55rem;
+}
+
+.ward-board {
+  overflow: hidden;
+}
+
+.ward-board-header {
+  border-bottom: 1px solid var(--line);
+  padding: 1.2rem;
+}
+
+.text-link {
+  color: #0369a1;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.ward-metrics {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 1.2rem 0;
+}
+
+.room-stack {
+  padding: 1.2rem;
+}
+
+.room-lane {
+  background: rgba(241, 245, 249, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.room-label {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.room-label a {
+  font-size: 1.05rem;
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.room-label span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.bed-row {
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.bed-tile,
+.bed-detail {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 8px solid var(--muted);
+  border-radius: 20px;
+  color: var(--ink);
+}
+
+.bed-tile {
+  display: grid;
+  gap: 0.55rem;
+  min-height: 185px;
+  min-width: min(280px, 100%);
+  padding: 1rem;
+  text-decoration: none;
+  width: calc(50% - 0.5rem);
+}
+
+.bed-topline,
+.device-line {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bed-topline span {
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.patient-name {
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.patient-meta {
+  font-size: 0.86rem;
+}
+
+.mini-vitals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.device-line,
+.empty-vitals {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.state-critical {
+  border-left-color: var(--critical) !important;
+}
+
+.state-warning {
+  border-left-color: var(--warning) !important;
+}
+
+.state-normal {
+  border-left-color: var(--normal) !important;
+}
+
+.state-offline {
+  border-left-color: var(--offline) !important;
+}
+
+.state-unmonitored {
+  border-left-color: var(--unmonitored) !important;
+}
+
+.state-vacant {
+  border-left-color: var(--vacant) !important;
+  opacity: 0.82;
+}
+
+.state-unknown {
+  border-left-color: var(--unknown) !important;
+}
+
+.mini-vital.state-critical,
+.vital-row.state-critical {
+  background: var(--critical-bg);
+  color: var(--critical);
+}
+
+.mini-vital.state-warning,
+.vital-row.state-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.priority-item.state-critical,
+.bed-tile.state-critical,
+.bed-detail.state-critical,
+.patient-hero.state-critical {
+  background: linear-gradient(135deg, #fff, var(--critical-bg));
+}
+
+.priority-item.state-warning,
+.bed-tile.state-warning,
+.bed-detail.state-warning {
+  background: linear-gradient(135deg, #fff, var(--warning-bg));
+}
+
+.priority-item.state-offline,
+.bed-tile.state-offline,
+.bed-detail.state-offline {
+  background: linear-gradient(135deg, #fff, var(--offline-bg));
+}
+
+.priority-item.state-unknown,
+.bed-tile.state-unknown,
+.bed-detail.state-unknown {
+  background: linear-gradient(135deg, #fff, var(--unknown-bg));
+}
+
+.priority-item.state-unmonitored,
+.bed-tile.state-unmonitored,
+.bed-detail.state-unmonitored {
+  background: linear-gradient(135deg, #fff, var(--unmonitored-bg));
+}
+
+.detail-hero {
+  display: flex;
+}
+
+.detail-stats {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.room-detail-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.bed-detail {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.bed-detail header,
+.vital-row,
+.device-meta div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bed-detail h3,
+.history-panel h3,
+.care-panel h3 {
+  margin: 0;
+}
+
+.vital-table,
+.device-meta {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.vital-row,
+.device-meta div {
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.75rem;
+}
+
+.device-meta {
+  margin: 0;
+}
+
+.device-meta dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.device-meta dd {
+  font-weight: 900;
+  margin: 0;
+}
+
+.patient-layout {
+  grid-template-columns: minmax(0, 1fr) 340px;
+}
+
+.reading-block {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.reading-block time {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+[data-privacy='on'] [data-private-name] {
+  color: transparent;
+  position: relative;
+}
+
+[data-privacy='on'] [data-private-name]::after {
+  color: var(--ink);
+  content: 'Privacy hidden';
+  left: 0;
+  position: absolute;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    height: auto;
+    position: static;
+  }
+
+  .nav-links {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .patient-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar,
+  .detail-hero,
+  .section-heading,
+  .ward-board-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .topbar-actions,
+  .bed-tile {
+    width: 100%;
+  }
+
+  .summary-card {
+    min-width: 100%;
+  }
+}

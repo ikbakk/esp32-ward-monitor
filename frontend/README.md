@@ -1,90 +1,59 @@
-# ESP32 Hospital rooms monitoring system
+# WardMonitorFe
 
-The [Live version](https://esp32-hospital-monitoring-system.vercel.app/) might not working because the Hardware probably turned off
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
 
-As a project for my college degree, a react app modifying
-[Hospital monitoing dashboard by DamascenoRafael](https://github.com/DamascenoRafael/hospital-monitor-dashboard) by changing it from MQTT protocols into using Firebase Realtime Database combined with Espressif ESP32 to get Heartrate, Spo2, and Temperature. Also migrate using Next.js
+## Development server
 
-## Features
+To start a local development server, run:
 
-- CRUD
-- Realtime monitor
-- Downloadable readings history with timestamp (.xlsx)
-- Color coded notification in card header
-
-## Color Reference for Card's Heading
-
-| Color                                               | Hex                                                              |
-| --------------------------------------------------- | ---------------------------------------------------------------- |
-| Danger (All Sensor Readings below parameter)        | ![#FF706F](https://via.placeholder.com/10/ff706f?text=+) #FF706F |
-| Warning (1 or 2 of sensor readings below parameter) | ![#FED597](https://via.placeholder.com/10/fed597?text=+) #FED597 |
-| Normal                                              | ![#5F8D4E](https://via.placeholder.com/10/5f8d4e?text=+) #5F8D4E |
-| No data                                             | ![#C9C9C9](https://via.placeholder.com/10/c9c9c9?text=+) #C9C9C9 |
-
-## Environment Variables
-
-To connect to firebase RTDB, you will need to add the following environment variables to your .env file
-
-`NEXT_PUBLIC_FirebaseApiKey="apiKey"`
-
-`NEXT_PUBLIC_FirebaseDatabaseURL="databaseURL"`
-
-`NEXT_PUBLIC_FirebaseProjectId="firebaseProjectId"`
-
-and env for the server side
-
-`FirebaseApiKey="apiKey"`
-
-`FirebaseDatabaseURL="databaseURL"`
-
-`FirebaseProjectId="firebaseProjectId"`
-
-You can find the config [Firebase Console](https://console.firebase.google.com) under Project Settings or if you want to directly edit the
-[firebase.config.js](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/src/config/firebase.config.js) it's the same.
-
-## Tech
-
-- Next.js
-- [Firebase Realtime Database](https://firebase.google.com/products/realtime-database)
-- [React Query](https://tanstack.com/query/v4/?from=reactQueryV3&original=https://react-query-v3.tanstack.com/)
-- [React Query Firebase](react-query-firebase.invertase.dev)
-- [Recharts](https://recharts.org)
-
-**Library for used sensor in this project**
-
-- [Firebase arduino client for ESP8266 & ESP32](https://github.com/mobizt/Firebase-ESP-Client)
-- [Adafruit-MLX90614-Library](https://github.com/adafruit/Adafruit-MLX90614-Library)
-- [Arduino-MAX30100 by oxullo](https://github.com/oxullo/Arduino-MAX30100)
-
-## Firebase realtime database JSON format
-
-JSON format for firebase realtime databse
-
-```JSON
-[
-  "userId": { //main node path for react query firebase hook
-    "1": { // sensor id
-      "nama": "nama pasien",
-      "nilai": {
-        "-NHFthuz-7J7H71noisX": { //this node name will randomly created by ESP32
-          "beat": 0,
-          "spo2": 0,
-          "temp": 0,
-          "timestamp": 0
-        }
-  }
-]
+```bash
+ng serve
 ```
 
-<!-- **How it's look like in firebase console**
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-![node](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/images/nodeData.png?raw=true)
-## Screenshots
+## Code scaffolding
 
-![main](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/images/Home.png?raw=true)
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-![bar](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/images/barcharts.png?raw=true)
+```bash
+ng generate component component-name
+```
 
-![history](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/images/history.png?raw=true)
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-![gif](https://github.com/ikbakkk/Esp32-Hospital-Monitoring-System/blob/main/images/gif.gif?raw=true) -->
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
