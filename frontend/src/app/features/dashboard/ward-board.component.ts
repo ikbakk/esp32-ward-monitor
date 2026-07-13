@@ -1,12 +1,13 @@
 import { Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LucideActivity, LucideBattery, LucideBed, LucideBellRing, LucideHeartPulse, LucideRadio, LucideThermometer, LucideWifi, LucideWifiOff } from '@lucide/angular';
 import type { Bed, ClinicalState, Ward } from '../../core/models/monitoring.models';
 import { MonitorDataService } from '../../core/services/monitor-data.service';
 import { findLatestReadingForBed, formatVitalValue, getStateClass, getStateLabel, getWardHighestState, summarizeWard } from '../../core/services/status-helpers';
 
 @Component({
   selector: 'app-ward-board',
-  imports: [RouterLink],
+  imports: [RouterLink, LucideActivity, LucideBattery, LucideBed, LucideBellRing, LucideHeartPulse, LucideRadio, LucideThermometer, LucideWifi, LucideWifiOff],
   template: `
     <section class="ward-board" [class]="wardStateClass()" [attr.aria-labelledby]="ward().id + '-title'">
       <header class="ward-board-header">
@@ -18,11 +19,11 @@ import { findLatestReadingForBed, formatVitalValue, getStateClass, getStateLabel
       </header>
 
       <div class="ward-metrics" aria-label="Ward summary">
-        <span><strong>{{ summary().critical }}</strong> critical</span>
-        <span><strong>{{ summary().warning }}</strong> warning</span>
-        <span><strong>{{ summary().offline }}</strong> offline</span>
-        <span><strong>{{ summary().unmonitored }}</strong> unmonitored</span>
-        <span><strong>{{ summary().vacant }}</strong> vacant</span>
+        <span class="state-critical" title="Critical"><svg lucideBellRing class="icon pill-icon"></svg><strong>{{ summary().critical }}</strong></span>
+        <span class="state-warning" title="Warning"><svg lucideActivity class="icon pill-icon"></svg><strong>{{ summary().warning }}</strong></span>
+        <span class="state-offline" title="Offline"><svg lucideWifiOff class="icon pill-icon"></svg><strong>{{ summary().offline }}</strong></span>
+        <span class="state-unmonitored" title="Unmonitored"><svg lucideRadio class="icon pill-icon"></svg><strong>{{ summary().unmonitored }}</strong></span>
+        <span class="state-vacant" title="Vacant"><svg lucideBed class="icon pill-icon"></svg><strong>{{ summary().vacant }}</strong></span>
       </div>
 
       <div class="room-stack">
@@ -38,7 +39,7 @@ import { findLatestReadingForBed, formatVitalValue, getStateClass, getStateLabel
                 <a class="bed-tile" [class]="bedClass(bed)" [routerLink]="bed.patient ? ['/patients', bed.patient.id] : ['/rooms', room.id]">
                   <span class="bed-topline">
                     <strong>{{ bed.label }}</strong>
-                    <span>{{ stateLabel(bed.state) }}</span>
+                    <span [title]="stateLabel(bed.state)"><svg lucideBellRing class="icon"></svg></span>
                   </span>
 
                   @if (bed.patient) {
@@ -53,19 +54,27 @@ import { findLatestReadingForBed, formatVitalValue, getStateClass, getStateLabel
                     <span class="mini-vitals" aria-label="Latest vital signs">
                       @for (vital of latestVitals(bed); track vital.key) {
                         <span [class]="'mini-vital ' + stateClass(vital.state)">
-                          {{ vital.label }} {{ formatVital(vital) }}
+                          @if (vital.key === 'temperature') {
+                            <svg lucideThermometer class="icon vital-icon"></svg>
+                          } @else if (vital.key === 'heart-rate') {
+                            <svg lucideHeartPulse class="icon vital-icon"></svg>
+                          } @else {
+                            <svg lucideActivity class="icon vital-icon"></svg>
+                          }
+                          {{ formatVital(vital) }}
                         </span>
                       }
                     </span>
                   } @else if (bed.state === 'unmonitored') {
-                    <span class="empty-vitals">No active hardware order</span>
+                    <span class="empty-vitals" title="No active hardware order"><svg lucideRadio class="icon vital-icon"></svg></span>
                   } @else if (bed.state === 'vacant') {
-                    <span class="empty-vitals">Ready for assignment</span>
+                    <span class="empty-vitals" title="Ready for assignment"><svg lucideBed class="icon vital-icon"></svg></span>
                   }
 
                   @if (bed.device) {
                     <span class="device-line">
-                      {{ bed.device.label }} · {{ bed.device.batteryPercent ?? 0 }}% · {{ bed.device.signalQuality ?? 'unknown' }} signal
+                      <span title="Battery"><svg lucideBattery class="icon vital-icon"></svg>{{ bed.device.batteryPercent ?? 0 }}%</span>
+                      <span [title]="'Signal: ' + (bed.device.signalQuality ?? 'unknown')"><svg lucideWifi class="icon vital-icon"></svg>{{ bed.device.signalQuality ?? 'unknown' }}</span>
                     </span>
                   }
                 </a>

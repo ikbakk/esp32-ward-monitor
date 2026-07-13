@@ -2,11 +2,11 @@ import { inject } from '@angular/core';
 import { Router, type CanActivateFn, type Routes } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 
-const demoGuard: CanActivateFn = () => {
+const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  if (auth.isDemoActive()) {
+  if (auth.isAuthenticated()) {
     return true;
   }
 
@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./layout/shell.component').then((m) => m.ShellComponent),
-    canActivate: [demoGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',

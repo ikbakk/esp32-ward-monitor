@@ -1,14 +1,36 @@
-import { Service, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
-@Service()
+export interface LoginCredentials {
+  email: string;
+  password: string;
+  wardCode?: string;
+}
+
+const SESSION_KEY = 'ward-monitor-demo-session';
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  readonly isDemoActive = signal(false);
+  readonly isAuthenticated = signal(typeof localStorage !== 'undefined' && localStorage.getItem(SESSION_KEY) === 'active');
 
-  enterDemo(): void {
-    this.isDemoActive.set(true);
+  /**
+   * Backend-ready login seam. Replace the demo branch with a real HTTP auth call
+   * when the ward-monitor API is available.
+   */
+  async login(credentials: LoginCredentials): Promise<void> {
+    const email = credentials.email.trim();
+    const password = credentials.password.trim();
+
+    if (!email || !password) {
+      throw new Error('Email and password are required.');
+    }
+
+    // Demo mode: accept any filled credentials while preserving the real login shape.
+    localStorage.setItem(SESSION_KEY, 'active');
+    this.isAuthenticated.set(true);
   }
 
-  exitDemo(): void {
-    this.isDemoActive.set(false);
+  signOut(): void {
+    localStorage.removeItem(SESSION_KEY);
+    this.isAuthenticated.set(false);
   }
 }
