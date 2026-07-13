@@ -2,17 +2,6 @@ import { inject } from '@angular/core';
 import { Router, type CanActivateFn, type Routes } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 
-const authGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
-
-  if (auth.isAuthenticated()) {
-    return true;
-  }
-
-  return router.createUrlTree(['/']);
-};
-
 export const routes: Routes = [
   {
     path: '',
@@ -21,7 +10,16 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./layout/shell.component').then((m) => m.ShellComponent),
-    canActivate: [authGuard],
+    canActivate: [(() => {
+      const auth = inject(AuthService);
+      const router = inject(Router);
+
+      if (auth.isAuthenticated()) {
+        return true;
+      }
+
+      return router.createUrlTree(['/']);
+    }) satisfies CanActivateFn],
     children: [
       {
         path: 'dashboard',
